@@ -1,5 +1,3 @@
-[file name]: index.html
-[file content begin]
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,7 +37,7 @@
   <link rel="stylesheet" href="styles.css">
   
   <!-- Favicon -->
-   <link rel="shortcut icon" href="imgs/favicon.png" type="image/x-icon">
+  <link rel="shortcut icon" href="imgs/favicon.png" type="image/x-icon">
   <link rel="icon" type="image/x-icon" href="imgs/favicon.png">
   <link rel="apple-touch-icon" href="imgs/favicon.png">
   
@@ -63,11 +61,18 @@
         <li><a href="#hero" class="active">Home</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#services">What We Do</a></li>
-        <li><a href="#word-of-week">Word of the Week</a></li>
-        <li><a href="#share-scripture">Share Scripture</a></li>
-        <li><a href="#gatherings">Gatherings</a></li>
-        <li><a href="#testimonials">Reflections</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li class="dropdown">
+          <a href="javascript:void(0)" class="dropdown-toggle">
+            More <i class="fas fa-chevron-down"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="#word-of-week">Word of the Week</a>
+            <a href="#share-scripture">Share Scripture</a>
+            <a href="#gatherings">Gatherings</a>
+            <a href="#testimonials">Reflections</a>
+            <a href="#contact">Contact</a>
+          </div>
+        </li>
       </ul>
     </div>
   </header>
@@ -76,8 +81,8 @@
   <section class="hero" id="hero">
     <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
       <h1>The Awe & Wonders</h1>
-      <p>Bible Study</p>
-      <p>Growing in reverence, wisdom, and truth through God's Word</p>
+      <p class="subtitle">Bible Study Community</p>
+      <p class="tagline">Growing in reverence, wisdom, and truth through God's Word</p>
       <div class="hero-buttons">
         <a href="#gatherings" class="btn btn-primary">Join Our Study</a>
         <a href="#share-scripture" class="btn btn-secondary">Submit a Scripture</a>
@@ -91,42 +96,59 @@
   <!-- About Section -->
   <section class="section about" id="about">
     <div class="container">
-      <h2 class="text-center">About The Awe & Wonders</h2>
+      <h2 class="section-title">About The Awe & Wonders</h2>
       <div class="about-content">
         <div class="about-text" data-aos="fade-right">
           <p>The Awe & Wonders is a community of believers dedicated to deepening our understanding of scripture through thoughtful study and reverent reflection. Our journey is focused on developing spiritual maturity through God's word, building meaningful relationships, and applying biblical truths to our daily lives.</p>
           <p>We believe that approaching scripture with reverence opens our hearts to God's wisdom, transforming our perspective and drawing us closer to His presence. Together, we create a supportive environment where questions are welcomed and faith is nurtured.</p>
         </div>
         <div class="quote-block" data-aos="fade-left">
-          <p>"Wisdom and knowledge will be the stability of your time, and the strength of salvation; the fear of the Lord is His treasure."</p>
-          <p>— Isaiah 33:6</p>
+          <div class="quote-icon">
+            <i class="fas fa-quote-left"></i>
+          </div>
+          <p class="quote-text">"Wisdom and knowledge will be the stability of your time, and the strength of salvation; the fear of the Lord is His treasure."</p>
+          <p class="quote-reference">— Isaiah 33:6</p>
         </div>
       </div>
     </div>
   </section>
 
+  <div class="section-divider">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M1200 120L0 16.48 0 0 1200 0 1200 120z" class="shape-fill"></path>
+    </svg>
+  </div>
+
   <!-- What We Do Section -->
   <section class="section services" id="services">
     <div class="container">
-      <h2 class="text-center">What We Do</h2>
+      <h2 class="section-title">What We Do</h2>
       <div class="services-grid">
         <div class="service-card" data-aos="zoom-in" data-aos-delay="100">
-          <i class="fas fa-bible"></i>
+          <div class="service-icon">
+            <i class="fas fa-bible"></i>
+          </div>
           <h3>Study the Word</h3>
           <p>Engage in deep, thoughtful discussions on scripture, exploring context and meaning with guidance from trusted resources.</p>
         </div>
         <div class="service-card" data-aos="zoom-in" data-aos-delay="200">
-          <i class="fas fa-pray"></i>
+          <div class="service-icon">
+            <i class="fas fa-pray"></i>
+          </div>
           <h3>Prayer & Reflection</h3>
           <p>Experience guided prayer sessions that cultivate stillness, allowing God's word to resonate within our hearts and minds.</p>
         </div>
         <div class="service-card" data-aos="zoom-in" data-aos-delay="300">
-          <i class="fas fa-users"></i>
+          <div class="service-icon">
+            <i class="fas fa-users"></i>
+          </div>
           <h3>Fellowship</h3>
           <p>Build meaningful connections with fellow believers, supporting each other's spiritual journey through community and friendship.</p>
         </div>
         <div class="service-card" data-aos="zoom-in" data-aos-delay="400">
-          <i class="fas fa-seedling"></i>
+          <div class="service-icon">
+            <i class="fas fa-seedling"></i>
+          </div>
           <h3>Spiritual Growth</h3>
           <p>Learn practical ways to apply scripture to daily life, developing spiritual disciplines that foster continuous growth.</p>
         </div>
@@ -134,35 +156,52 @@
     </div>
   </section>
 
-<!-- Word of the Week Section -->
-<section class="section word-of-week" id="word-of-week">
-  <div class="container">
-    <h2 class="text-center">Word of the Week</h2>
-    <!-- The animated background will be inserted here by JavaScript -->
-    <div class="word-content" data-aos="fade-up">
-      <h3>Reverence</h3>
-      <p>Reverence is a profound respect and awe for God that transforms how we approach His word and presence. It's not simply fear, but a deep appreciation of His holiness that inspires worship and obedience. When we approach scripture with reverence, we open ourselves to divine wisdom that can shape our character and guide our steps.</p>
-      <a href="javascript:void(0)" class="btn btn-primary">View Previous Words</a>
-    </div>
+  <div class="section-divider reverse">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M1200 120L0 16.48 0 0 1200 0 1200 120z" class="shape-fill"></path>
+    </svg>
   </div>
-</section>
+
+  <!-- Word of the Week Section -->
+  <section class="section word-of-week" id="word-of-week">
+    <div class="container">
+      <h2 class="section-title">Word of the Week</h2>
+      <div class="word-content" data-aos="fade-up">
+        <div class="word-header">
+          <span class="word-badge">This Week's Focus</span>
+          <h3>Reverence</h3>
+        </div>
+        <p>Reverence is a profound respect and awe for God that transforms how we approach His word and presence. It's not simply fear, but a deep appreciation of His holiness that inspires worship and obedience. When we approach scripture with reverence, we open ourselves to divine wisdom that can shape our character and guide our steps.</p>
+        <a href="javascript:void(0)" class="btn btn-outline">View Previous Words</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider angled">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M1200 120L0 16.48 0 0 1200 0 1200 120z" class="shape-fill"></path>
+    </svg>
+  </div>
+
   <!-- Share Scripture Section -->
   <section class="section share-scripture" id="share-scripture">
     <div class="container">
-      <h2 class="text-center">Share Your Scripture</h2>
-      <p class="text-center">Is there a particular verse or passage that has been meaningful in your journey? Share it with our community along with a brief reflection on why it speaks to you.</p>
+      <h2 class="section-title">Share Your Scripture</h2>
+      <p class="section-subtitle">Is there a particular verse or passage that has been meaningful in your journey? Share it with our community along with a brief reflection on why it speaks to you.</p>
       
       <div class="scripture-form" data-aos="fade-up">
         <form id="scripture-form">
-          <div class="form-group">
-            <label for="name">Your Name (optional)</label>
-            <input type="text" id="name" name="name" placeholder="How you'd like to be identified">
-          </div>
-          
-          <div class="form-group">
-            <label for="reference">Scripture Reference*</label>
-            <input type="text" id="reference" name="reference" placeholder="e.g. John 3:16" required>
-            <div class="error-message" id="reference-error">Please enter a scripture reference</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Your Name (optional)</label>
+              <input type="text" id="name" name="name" placeholder="How you'd like to be identified">
+            </div>
+            
+            <div class="form-group">
+              <label for="reference">Scripture Reference*</label>
+              <input type="text" id="reference" name="reference" placeholder="e.g. John 3:16" required>
+              <div class="error-message" id="reference-error">Please enter a scripture reference</div>
+            </div>
           </div>
           
           <div class="form-group">
@@ -172,81 +211,139 @@
           </div>
           
           <div class="form-submit">
-            <button type="submit" class="btn btn-primary" id="submit-scripture">Submit</button>
+            <button type="submit" class="btn btn-primary" id="submit-scripture">
+              <i class="fas fa-paper-plane"></i> Submit Scripture
+            </button>
           </div>
         </form>
         
         <div class="success-message" id="scripture-success">
-          Thank you for sharing your scripture! It has been submitted successfully.
+          <i class="fas fa-check-circle"></i>
+          <div>
+            <h4>Thank you for sharing!</h4>
+            <p>Your scripture has been submitted successfully.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
+
+  <div class="section-divider wave">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+    </svg>
+  </div>
 
   <!-- Gatherings Section -->
   <section class="section gatherings" id="gatherings">
     <div class="container">
-      <h2 class="text-center">Gatherings</h2>
+      <h2 class="section-title">Our Gatherings</h2>
       <div class="gathering-card" data-aos="fade-up">
-        <div class="gathering-item">
-          <i class="far fa-calendar-alt"></i>
-          <div class="gathering-info">
-            <strong>Day:</strong> Wednesday
+        <div class="gathering-header">
+          <h3>Weekly Bible Study</h3>
+          <span class="gathering-status">Online & In-Person</span>
+        </div>
+        <div class="gathering-details">
+          <div class="gathering-item">
+            <div class="gathering-icon">
+              <i class="far fa-calendar-alt"></i>
+            </div>
+            <div class="gathering-info">
+              <strong>Day:</strong> --
+            </div>
+          </div>
+          <div class="gathering-item">
+            <div class="gathering-icon">
+              <i class="far fa-clock"></i>
+            </div>
+            <div class="gathering-info">
+              <strong>Time:</strong> --
+            </div>
+          </div>
+          <div class="gathering-item">
+            <div class="gathering-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="gathering-info">
+              <strong>Location:</strong> Online
+            </div>
           </div>
         </div>
-        <div class="gathering-item">
-          <i class="far fa-clock"></i>
-          <div class="gathering-info">
-            <strong>Time:</strong> To be confirmed 
-          </div>
-        </div>
-        <div class="gathering-item">
-          <i class="fas fa-map-marker-alt"></i>
-          <div class="gathering-info">
-            <strong>Location:</strong> Online (Zoom)
-          </div>
-        </div>
+        <a href="#contact" class="btn btn-primary btn-block">
+          <i class="fas fa-user-plus"></i> Join Next Gathering
+        </a>
       </div>
     </div>
   </section>
 
+  <div class="section-divider curve">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,106.7C960,117,1056,139,1152,138.7C1248,139,1344,117,1392,106.7L1440,96L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z" class="shape-fill"></path>
+    </svg>
+  </div>
+
   <!-- Contact Section -->
   <section class="section contact" id="contact">
     <div class="container">
-      <h2 class="text-center">Get in Touch</h2>
-      <div class="contact-form" data-aos="fade-up">
-        <form id="contact-form">
-          <div class="form-group">
-            <label for="contact-name">Your Name*</label>
-            <input type="text" id="contact-name" name="contact-name" required placeholder="Enter your name">
-            <div class="error-message" id="name-error">Please enter your name</div>
-          </div>
+      <h2 class="section-title">Get in Touch</h2>
+      <div class="contact-wrapper">
+        <div class="contact-form" data-aos="fade-right">
+          <form id="contact-form">
+            <div class="form-group">
+              <label for="contact-name">Your Name*</label>
+              <input type="text" id="contact-name" name="contact-name" required placeholder="Enter your name">
+              <div class="error-message" id="name-error">Please enter your name</div>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email Address*</label>
+              <input type="email" id="email" name="email" required placeholder="Enter your email address">
+              <div class="error-message" id="email-error">Please enter a valid email address</div>
+            </div>
+            
+            <div class="form-group">
+              <label for="message">Message*</label>
+              <textarea id="message" name="message" required placeholder="Your message or inquiry..."></textarea>
+              <div class="error-message" id="message-error">Please enter your message</div>
+            </div>
+            
+            <div class="form-submit">
+              <button type="submit" class="btn btn-primary" id="submit-contact">
+                <i class="fas fa-paper-plane"></i> Send Message
+              </button>
+            </div>
+          </form>
           
-          <div class="form-group">
-            <label for="email">Email Address*</label>
-            <input type="email" id="email" name="email" required placeholder="Enter your email address">
-            <div class="error-message" id="email-error">Please enter a valid email address</div>
+          <div class="success-message" id="contact-success">
+            <i class="fas fa-check-circle"></i>
+            <div>
+              <h4>Message Sent!</h4>
+              <p>We'll get back to you soon.</p>
+            </div>
           </div>
-          
-          <div class="form-group">
-            <label for="message">Message*</label>
-            <textarea id="message" name="message" required placeholder="Your message or inquiry..."></textarea>
-            <div class="error-message" id="message-error">Please enter your message</div>
-          </div>
-          
-          <div class="form-submit">
-            <button type="submit" class="btn btn-primary" id="submit-contact">Submit</button>
-          </div>
-        </form>
-        
-        <div class="success-message" id="contact-success">
-          Thank you for your message! We'll get back to you soon.
         </div>
-      </div>
-      
-      <div class="contact-info">
-        <a href="mailto:contact@aweofgod.org"><i class="fas fa-envelope"></i> contact@aweofgod.org</a>
-        <a href="javascript:void(0)"><i class="fab fa-whatsapp"></i> WhatsApp Group</a>
+        
+        <div class="contact-info" data-aos="fade-left">
+          <h3>Contact Information</h3>
+          <div class="contact-method">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div>
+              <h4>Email</h4>
+              <a href="mailto:awenwonders@gmail.com">awenwonders@gmail.com</a>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-icon">
+              <i class="fab fa-whatsapp"></i>
+            </div>
+            <div>
+              <h4>WhatsApp Group</h4>
+              <a href="javascript:void(0)" id="whatsapp-link">Join Our Community</a>
+            </div>
+          </div>
+
       </div>
     </div>
   </section>
@@ -255,38 +352,73 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-content">
-        <div class="footer-logo">
-          <div class="logo-container">
-            <img src="imgs/favicon.png" alt="The Awe & Wonders Logo" class="logo-img">
-            <div class="footer-logo-text">
-              <h3>The Awe & Wonders</h3>
-              <p class="footer-motto">Walking in wisdom, living in reverence.</p>
+        <div class="footer-main">
+          <div class="footer-brand">
+            <div class="logo-container">
+              <img src="imgs/favicon.png" alt="The Awe & Wonders Logo" class="logo-img">
+              <div class="footer-logo-text">
+                <h3>The Awe & Wonders</h3>
+                <p class="footer-motto">Walking in wisdom, living in reverence.</p>
+              </div>
+            </div>
+            <p class="footer-description">A community dedicated to deepening understanding of scripture through thoughtful study and reverent reflection.</p>
+          </div>
+          
+          <div class="footer-links-group">
+            <div class="footer-links">
+              <h4>Quick Links</h4>
+              <ul>
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">What We Do</a></li>
+                <li><a href="#word-of-week">Word of the Week</a></li>
+                <li><a href="#share-scripture">Share Scripture</a></li>
+              </ul>
+            </div>
+            
+            <div class="footer-links">
+              <h4>Resources</h4>
+              <ul>
+                <li><a href="#gatherings">Gatherings</a></li>
+                <li><a href="#testimonials">Reflections</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#">Study Materials</a></li>
+                <li><a href="#">Prayer Requests</a></li>
+              </ul>
+            </div>
+            
+            <div class="footer-links">
+              <h4>Connect</h4>
+              <ul>
+                <li><a href="#">Join WhatsApp</a></li>
+                <li><a href="#">Subscribe to Newsletter</a></li>
+                <li><a href="#">Volunteer</a></li>
+                <li><a href="#">Prayer Partners</a></li>
+                <li><a href="#">Leadership Team</a></li>
+              </ul>
             </div>
           </div>
         </div>
-        <div class="footer-links">
-          <!--
-                    <ul class="footer-nav">
-            <li><a href="#hero">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#services">What We Do</a></li>
-            <li><a href="#word-of-week">Word of the Week</a></li>
-            <li><a href="#share-scripture">Share Scripture</a></li>
-            <li><a href="#gatherings">Gatherings</a></li>
-            <li><a href="#testimonials">Reflections</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-          
-          -->
-
+        
+        <div class="footer-bottom">
+          <div class="footer-copyright">
+            <p>&copy; 2025 The Awe & Wonders. All rights reserved.</p>
+            <p class="scripture">"The fear of the LORD is the beginning of wisdom, and knowledge of the Holy One is understanding." — Proverbs 9:10</p>
+          </div>
+          <div class="footer-legal">
+            <p>Designed By Cascade Creations</p>
+          </div>
         </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2025 The Awe of God. All rights reserved.</p>
       </div>
     </div>
   </footer>
 
+  <!-- Floating Buttons -->
+  <div class="whatsapp-float" id="whatsapp-float">
+    <i class="fab fa-whatsapp"></i>
+    <span class="tooltip">Join WhatsApp Group</span>
+  </div>
+  
   <div class="scroll-top" id="scroll-top">
     <i class="fas fa-chevron-up"></i>
   </div>
