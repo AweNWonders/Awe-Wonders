@@ -1,4 +1,13 @@
-// Initialize AOS
+// ============================================
+// THE AWE & WONDERS - BIBLE STUDY WEBSITE
+// Main JavaScript File
+// ============================================
+
+// ============================================
+// CONFIGURATION & INITIALIZATION
+// ============================================
+
+// Initialize AOS (Animate On Scroll)
 AOS.init({
   duration: 800,
   easing: 'ease-out',
@@ -7,298 +16,624 @@ AOS.init({
   delay: 100
 });
 
-// DOM elements
+// ============================================
+// DOM ELEMENTS
+// ============================================
+
+// Loader
+const loader = document.getElementById('loader');
+const loaderProgressBar = document.querySelector('.loader-progress-bar');
+
+// Navigation
 const navbar = document.getElementById('navbar');
 const navLinks = document.querySelectorAll('.nav-links a:not(.dropdown-toggle)');
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-links');
-const scrollTopBtn = document.getElementById('scroll-top');
-const whatsappFloat = document.getElementById('whatsapp-float');
-const scriptureForm = document.getElementById('scripture-form');
-const contactForm = document.getElementById('contact-form');
-const whatsappLink = document.getElementById('whatsapp-link');
 const dropdown = document.querySelector('.dropdown');
 const dropdownToggle = document.querySelector('.dropdown-toggle');
+const dropdownMenu = document.querySelector('.dropdown-menu');
 
-// Mobile menu toggle
-hamburger.addEventListener('click', () => {
+// Floating Buttons
+const scrollTopBtn = document.getElementById('scroll-top');
+const whatsappFloat = document.getElementById('whatsapp-float');
+
+// Forms
+const scriptureForm = document.getElementById('scripture-form');
+const contactForm = document.getElementById('contact-form');
+
+// WhatsApp Links
+const whatsappLink = document.getElementById('whatsapp-link');
+
+// ============================================
+// LOADER FUNCTIONALITY
+// ============================================
+
+/**
+ * Simulate loading progress
+ */
+function simulateLoadingProgress() {
+  if (!loaderProgressBar) return;
+  
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += Math.random() * 20;
+    if (progress > 100) progress = 100;
+    loaderProgressBar.style.width = `${progress}%`;
+    
+    if (progress >= 100) {
+      clearInterval(interval);
+      hideLoader();
+    }
+  }, 200);
+}
+
+/**
+ * Hide the loader with fade-out animation
+ */
+function hideLoader() {
+  if (!loader) return;
+  
+  loader.classList.add('fade-out');
+  
+  setTimeout(() => {
+    loader.style.display = 'none';
+  }, 800);
+}
+
+// ============================================
+// NAVIGATION FUNCTIONALITY
+// ============================================
+
+/**
+ * Toggle mobile menu
+ */
+function toggleMobileMenu() {
   hamburger.classList.toggle('active');
   navMenu.classList.toggle('active');
-});
-
-// Close menu when clicking a link
-navLinks.forEach(link => {
-  link.addEventListener('click', () => {
-    hamburger.classList.remove('active');
-    navMenu.classList.remove('active');
-    
-    // Close dropdown on mobile
-    if (window.innerWidth <= 768) {
-      dropdown.classList.remove('active');
-    }
-  });
-});
-
-// Dropdown toggle
-if (dropdownToggle) {
-  dropdownToggle.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (window.innerWidth <= 768) {
-      // On mobile, toggle dropdown visibility
-      dropdown.classList.toggle('active');
-    } else {
-      // On desktop, toggle dropdown
-      dropdown.classList.toggle('active');
-    }
-  });
-}
-
-// Close dropdown when clicking outside
-document.addEventListener('click', (e) => {
-  if (!dropdown.contains(e.target)) {
+  
+  // Close dropdown when toggling mobile menu
+  if (window.innerWidth <= 768) {
     dropdown.classList.remove('active');
   }
-});
+}
 
-// Close dropdown on mobile when resizing to desktop
-window.addEventListener('resize', () => {
+/**
+ * Close mobile menu when clicking a link
+ */
+function closeMobileMenu() {
+  hamburger.classList.remove('active');
+  navMenu.classList.remove('active');
+  
+  // Close dropdown on mobile
+  if (window.innerWidth <= 768) {
+    dropdown.classList.remove('active');
+  }
+}
+
+/**
+ * Toggle dropdown menu
+ * @param {Event} e - Click event
+ */
+function toggleDropdown(e) {
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  
+  if (window.innerWidth <= 768) {
+    // On mobile, toggle dropdown visibility
+    dropdown.classList.toggle('active');
+  } else {
+    // On desktop, toggle dropdown
+    dropdown.classList.toggle('active');
+  }
+}
+
+/**
+ * Close dropdown when clicking outside
+ * @param {Event} e - Click event
+ */
+function closeDropdownOutside(e) {
+  if (dropdown && !dropdown.contains(e.target)) {
+    dropdown.classList.remove('active');
+  }
+}
+
+/**
+ * Handle window resize events
+ */
+function handleResize() {
   if (window.innerWidth > 768) {
+    // Reset mobile menu on desktop
     hamburger.classList.remove('active');
     navMenu.classList.remove('active');
   }
-});
-
-// WhatsApp functionality
-if (whatsappLink) {
-  whatsappLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    const whatsappGroupLink = "https://chat.whatsapp.com/GzBUWXC7hFKBsuh81Z2H5c";
-    window.open(whatsappGroupLink, '_blank');
-  });
 }
 
-if (whatsappFloat) {
-  whatsappFloat.addEventListener('click', () => {
-    const whatsappGroupLink = "https://chat.whatsapp.com/GzBUWXC7hFKBsuh81Z2H5c";
-    window.open(whatsappGroupLink, '_blank');
-  });
+// ============================================
+// WHATSAPP FUNCTIONALITY
+// ============================================
+
+const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/GzBUWXC7hFKBsuh81Z2H5c";
+
+/**
+ * Open WhatsApp group link
+ */
+function openWhatsAppGroup() {
+  window.open(WHATSAPP_GROUP_LINK, '_blank');
 }
 
-// Scroll events
-window.addEventListener('scroll', () => {
+// ============================================
+// SCROLL FUNCTIONALITY
+// ============================================
+
+/**
+ * Handle scroll events for various effects
+ */
+function handleScroll() {
+  const scrollY = window.scrollY;
+  
   // Navbar styling on scroll
-  if (window.scrollY > 50) {
+  if (scrollY > 50) {
     navbar.classList.add('scrolled');
   } else {
     navbar.classList.remove('scrolled');
   }
   
   // Scroll to top button visibility
-  if (window.scrollY > 500) {
+  if (scrollY > 500) {
     scrollTopBtn.classList.add('visible');
   } else {
     scrollTopBtn.classList.remove('visible');
   }
   
   // WhatsApp button visibility
-  if (window.scrollY > 200) {
+  if (scrollY > 200) {
     whatsappFloat.classList.add('visible');
   } else {
     whatsappFloat.classList.remove('visible');
   }
   
   // Active section highlighting
+  highlightActiveSection();
+}
+
+/**
+ * Highlight active navigation link based on scroll position
+ */
+function highlightActiveSection() {
   let current = '';
   const sections = document.querySelectorAll('section[id]');
+  const offset = 100;
   
   sections.forEach(section => {
-    const sectionTop = section.offsetTop - 100;
+    const sectionTop = section.offsetTop - offset;
     const sectionHeight = section.clientHeight;
+    const sectionId = section.getAttribute('id');
     
     if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
-      current = section.getAttribute('id');
+      current = sectionId;
     }
   });
   
   navLinks.forEach(link => {
     link.classList.remove('active');
     const href = link.getAttribute('href');
+    
     if (href && href.includes(current)) {
       link.classList.add('active');
     }
   });
-});
+}
 
-// Scroll to top button functionality
-scrollTopBtn.addEventListener('click', () => {
+/**
+ * Scroll to top smoothly
+ */
+function scrollToTop() {
   window.scrollTo({
     top: 0,
     behavior: 'smooth'
   });
-});
+}
 
-// Form handling
-function handleFormSubmit(form, successId, buttonId, validationFields) {
-  return function(e) {
-    e.preventDefault();
+/**
+ * Smooth scroll to section
+ * @param {string} selector - CSS selector of target element
+ */
+function smoothScrollTo(selector) {
+  const target = document.querySelector(selector);
+  if (target) {
+    target.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
+}
+
+// ============================================
+// FORM HANDLING
+// ============================================
+
+/**
+ * Validate email format
+ * @param {string} email - Email to validate
+ * @returns {boolean} - Whether email is valid
+ */
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+/**
+ * Show form error
+ * @param {HTMLElement} input - Input element
+ * @param {HTMLElement} errorElement - Error message element
+ * @param {string} message - Error message
+ */
+function showFormError(input, errorElement, message = 'This field is required') {
+  errorElement.textContent = message;
+  errorElement.style.display = 'block';
+  input.style.borderColor = 'var(--accent-color)';
+}
+
+/**
+ * Hide form error
+ * @param {HTMLElement} input - Input element
+ * @param {HTMLElement} errorElement - Error message element
+ */
+function hideFormError(input, errorElement) {
+  errorElement.style.display = 'none';
+  input.style.borderColor = '#e1e5e9';
+}
+
+/**
+ * Show form success message
+ * @param {string} successId - ID of success message element
+ * @param {HTMLElement} form - Form element to reset
+ * @param {HTMLElement} submitBtn - Submit button to reset
+ * @param {string} originalBtnText - Original button HTML content
+ */
+function showFormSuccess(successId, form, submitBtn, originalBtnText) {
+  const successMsg = document.getElementById(successId);
+  
+  if (successMsg) {
+    successMsg.style.display = 'block';
+  }
+  
+  // Reset form
+  form.reset();
+  
+  // Reset button
+  submitBtn.disabled = false;
+  submitBtn.innerHTML = originalBtnText;
+  
+  // Hide success message after 5 seconds
+  setTimeout(() => {
+    if (successMsg) {
+      successMsg.style.display = 'none';
+    }
+  }, 5000);
+  
+  // Scroll to show success message
+  if (successMsg) {
+    successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+/**
+ * Handle form submission
+ * @param {Event} e - Submit event
+ * @param {Object} options - Form configuration options
+ */
+function handleFormSubmit(e, options) {
+  e.preventDefault();
+  
+  const { form, successId, buttonId, validationFields } = options;
+  const submitBtn = form.querySelector(buttonId);
+  const originalBtnText = submitBtn.innerHTML;
+  let isValid = true;
+  
+  // Validate all fields
+  validationFields.forEach(field => {
+    const input = form.querySelector(field.selector);
+    const error = form.querySelector(field.errorId);
     
-    let valid = true;
+    if (field.required && !input.value.trim()) {
+      showFormError(input, error, field.errorMessage || 'This field is required');
+      isValid = false;
+    } else if (field.type === 'email' && input.value.trim() && !isValidEmail(input.value)) {
+      showFormError(input, error, 'Please enter a valid email address');
+      isValid = false;
+    } else if (error) {
+      hideFormError(input, error);
+    }
+  });
+  
+  if (!isValid) return;
+  
+  // Disable submit button and show loading state
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+  
+  // Simulate API request (replace with actual API call)
+  setTimeout(() => {
+    showFormSuccess(successId, form, submitBtn, originalBtnText);
+  }, 1500);
+}
+
+// ============================================
+// TOOLTIP FUNCTIONALITY
+// ============================================
+
+/**
+ * Initialize tooltips
+ */
+function initTooltips() {
+  const tooltips = document.querySelectorAll('.tooltip');
+  
+  tooltips.forEach(tooltip => {
+    const parent = tooltip.parentElement;
     
-    // Validate required fields
-    validationFields.forEach(field => {
-      const input = form.querySelector(field.selector);
-      const error = form.querySelector(field.errorId);
-      
-      if (field.required && !input.value.trim()) {
-        error.style.display = 'block';
-        input.style.borderColor = 'var(--accent-color)';
-        valid = false;
-      } else if (field.type === 'email' && input.value.trim() && !isValidEmail(input.value)) {
-        error.style.display = 'block';
-        error.textContent = 'Please enter a valid email address';
-        input.style.borderColor = 'var(--accent-color)';
-        valid = false;
-      } else {
-        error.style.display = 'none';
-        input.style.borderColor = '#e1e5e9';
-      }
+    parent.addEventListener('mouseenter', () => {
+      tooltip.style.opacity = '1';
     });
     
-    if (valid) {
-      const submitBtn = form.querySelector(buttonId);
-      const successMsg = document.getElementById(successId);
-      
-      // Disable submit button and show loading state
-      submitBtn.disabled = true;
-      const originalText = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-      
-      // Simulate API request
-      setTimeout(() => {
-        // Show success message
-        successMsg.style.display = 'block';
-        
-        // Reset form
-        form.reset();
-        
-        // Reset button
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
-        
-        // Hide success message after 5 seconds
-        setTimeout(() => {
-          successMsg.style.display = 'none';
-        }, 5000);
-        
-        // Scroll to show success message
-        successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 1500);
-    }
-  };
+    parent.addEventListener('mouseleave', () => {
+      tooltip.style.opacity = '0';
+    });
+  });
 }
 
-// Email validation
-function isValidEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
-}
+// ============================================
+// DATA STORAGE (LocalStorage)
+// ============================================
 
-// Scripture form submission
-if (scriptureForm) {
-  scriptureForm.addEventListener('submit', handleFormSubmit(scriptureForm, 'scripture-success', '#submit-scripture', [
-    { selector: '#reference', errorId: '#reference-error', required: true },
-    { selector: '#reflection', errorId: '#reflection-error', required: true },
-    { selector: '#name', errorId: null, required: false }
-  ]));
-}
-
-// Contact form submission
-if (contactForm) {
-  contactForm.addEventListener('submit', handleFormSubmit(contactForm, 'contact-success', '#submit-contact', [
-    { selector: '#contact-name', errorId: '#name-error', required: true },
-    { selector: '#email', errorId: '#email-error', required: true, type: 'email' },
-    { selector: '#message', errorId: '#message-error', required: true }
-  ]));
-}
-
-// Word of the Week data
-const wordsOfWeek = [
-  {
-    word: "Reverence",
-    definition: "Reverence is a profound respect and awe for God that transforms how we approach His word and presence. It's not simply fear, but a deep appreciation of His holiness that inspires worship and obedience.",
-    scripture: "Proverbs 9:10",
-    date: "This Week"
-  },
-  {
-    word: "Wisdom",
-    definition: "The ability to discern what is true, right, and lasting. Biblical wisdom begins with the fear of the Lord and leads to right living.",
-    scripture: "James 3:17",
-    date: "Last Week"
-  },
-  {
-    word: "Grace",
-    definition: "The free and unmerited favor of God, as manifested in the salvation of sinners and the bestowal of blessings.",
-    scripture: "Ephesians 2:8-9",
-    date: "Two Weeks Ago"
+/**
+ * Initialize default data if not exists
+ */
+function initLocalStorageData() {
+  // Word of the Week data
+  if (!localStorage.getItem('wordsOfWeek')) {
+    const wordsOfWeek = [
+      {
+        word: "Reverence",
+        definition: "Reverence is a profound respect and awe for God that transforms how we approach His word and presence. It's not simply fear, but a deep appreciation of His holiness that inspires worship and obedience.",
+        scripture: "Proverbs 9:10",
+        date: "This Week"
+      },
+      {
+        word: "Wisdom",
+        definition: "The ability to discern what is true, right, and lasting. Biblical wisdom begins with the fear of the Lord and leads to right living.",
+        scripture: "James 3:17",
+        date: "Last Week"
+      },
+      {
+        word: "Grace",
+        definition: "The free and unmerited favor of God, as manifested in the salvation of sinners and the bestowal of blessings.",
+        scripture: "Ephesians 2:8-9",
+        date: "Two Weeks Ago"
+      }
+    ];
+    localStorage.setItem('wordsOfWeek', JSON.stringify(wordsOfWeek));
   }
-];
-
-// Save to localStorage
-localStorage.setItem('wordsOfWeek', JSON.stringify(wordsOfWeek));
-
-// Gatherings data
-const gatheringsData = {
-  weekly: {
-    day: "Wednesday",
-    time: "7:00 PM - 8:30 PM",
-    location: "Online (Zoom) & Church Hall",
-    type: "Bible Study"
-  },
-  special: {
-    day: "First Sunday",
-    time: "3:00 PM - 5:00 PM",
-    location: "Community Center",
-    type: "Fellowship & Prayer"
+  
+  // Gatherings data
+  if (!localStorage.getItem('gatheringsData')) {
+    const gatheringsData = {
+      weekly: {
+        day: "Wednesday",
+        time: "7:00 PM - 8:30 PM",
+        location: "Online (Zoom) & Church Hall",
+        type: "Bible Study"
+      },
+      special: {
+        day: "First Sunday",
+        time: "3:00 PM - 5:00 PM",
+        location: "Community Center",
+        type: "Fellowship & Prayer"
+      }
+    };
+    localStorage.setItem('gatheringsData', JSON.stringify(gatheringsData));
   }
-};
+}
 
-localStorage.setItem('gatheringsData', JSON.stringify(gatheringsData));
+// ============================================
+// EVENT LISTENERS SETUP
+// ============================================
 
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  // Add smooth scroll for anchor links
+/**
+ * Set up all event listeners
+ */
+function setupEventListeners() {
+  // Mobile menu toggle
+  if (hamburger) {
+    hamburger.addEventListener('click', toggleMobileMenu);
+  }
+  
+  // Close mobile menu when clicking a link
+  navLinks.forEach(link => {
+    link.addEventListener('click', closeMobileMenu);
+  });
+  
+  // Dropdown toggle
+  if (dropdownToggle) {
+    dropdownToggle.addEventListener('click', toggleDropdown);
+  }
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', closeDropdownOutside);
+  
+  // Window resize
+  window.addEventListener('resize', handleResize);
+  
+  // WhatsApp functionality
+  if (whatsappLink) {
+    whatsappLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      openWhatsAppGroup();
+    });
+  }
+  
+  if (whatsappFloat) {
+    whatsappFloat.addEventListener('click', openWhatsAppGroup);
+  }
+  
+  // Scroll events
+  window.addEventListener('scroll', handleScroll);
+  
+  // Scroll to top button
+  if (scrollTopBtn) {
+    scrollTopBtn.addEventListener('click', scrollToTop);
+  }
+  
+  // Smooth scroll for anchor links
   document.querySelectorAll('a[href^="#"]:not(.dropdown-toggle)').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
       const href = this.getAttribute('href');
+      
       if (href !== '#' && href !== 'javascript:void(0)') {
         e.preventDefault();
-        const target = document.querySelector(href);
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-          
-          // Close dropdown after clicking a link
-          if (window.innerWidth <= 768) {
-            dropdown.classList.remove('active');
-          }
+        smoothScrollTo(href);
+        
+        // Close dropdown on mobile after clicking
+        if (window.innerWidth <= 768) {
+          dropdown.classList.remove('active');
         }
       }
     });
   });
   
+  // Scripture form submission
+  if (scriptureForm) {
+    scriptureForm.addEventListener('submit', (e) => handleFormSubmit(e, {
+      form: scriptureForm,
+      successId: 'scripture-success',
+      buttonId: '#submit-scripture',
+      validationFields: [
+        { 
+          selector: '#reference', 
+          errorId: '#reference-error', 
+          required: true,
+          errorMessage: 'Please enter a scripture reference'
+        },
+        { 
+          selector: '#reflection', 
+          errorId: '#reflection-error', 
+          required: true,
+          errorMessage: 'Please share your reflection'
+        },
+        { 
+          selector: '#name', 
+          errorId: null, 
+          required: false 
+        }
+      ]
+    }));
+  }
+  
+  // Contact form submission
+  if (contactForm) {
+    contactForm.addEventListener('submit', (e) => handleFormSubmit(e, {
+      form: contactForm,
+      successId: 'contact-success',
+      buttonId: '#submit-contact',
+      validationFields: [
+        { 
+          selector: '#contact-name', 
+          errorId: '#name-error', 
+          required: true,
+          errorMessage: 'Please enter your name'
+        },
+        { 
+          selector: '#email', 
+          errorId: '#email-error', 
+          required: true, 
+          type: 'email',
+          errorMessage: 'Please enter a valid email address'
+        },
+        { 
+          selector: '#message', 
+          errorId: '#message-error', 
+          required: true,
+          errorMessage: 'Please enter your message'
+        }
+      ]
+    }));
+  }
+}
+
+// ============================================
+// INITIALIZATION
+// ============================================
+
+/**
+ * Initialize the application
+ */
+function initApp() {
+  // Initialize local storage data
+  initLocalStorageData();
+  
+  // Set up event listeners
+  setupEventListeners();
+  
   // Initialize tooltips
-  const tooltips = document.querySelectorAll('.tooltip');
-  tooltips.forEach(tooltip => {
-    const parent = tooltip.parentElement;
-    parent.addEventListener('mouseenter', () => {
-      tooltip.style.opacity = '1';
-    });
-    parent.addEventListener('mouseleave', () => {
-      tooltip.style.opacity = '0';
-    });
-  });
-})
+  initTooltips();
+  
+  // Initial scroll check
+  handleScroll();
+  
+  console.log('The Awe & Wonders Bible Study website initialized successfully!');
+}
+
+// ============================================
+// PAGE LOAD HANDLING
+// ============================================
+
+/**
+ * Handle page load completion
+ */
+function handlePageLoad() {
+  // If loader exists, start loading simulation
+  if (loader) {
+    simulateLoadingProgress();
+  } else {
+    // If no loader, just initialize app
+    initApp();
+  }
+  
+  // Initialize app after a short delay (or immediately if loader completes)
+  const initDelay = loader ? 2500 : 0;
+  
+  setTimeout(() => {
+    initApp();
+  }, initDelay);
+}
+
+// ============================================
+// EVENT LISTENERS FOR PAGE LOAD
+// ============================================
+
+// Wait for DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', handlePageLoad);
+
+// Fallback: Initialize when window loads completely
+window.addEventListener('load', () => {
+  // If DOMContentLoaded didn't fire for some reason
+  if (!document.body.classList.contains('dom-loaded')) {
+    handlePageLoad();
+  }
+});
+
+// ============================================
+// GLOBAL EXPORTS (if needed for debugging)
+// ============================================
+
+// For debugging purposes, you can expose certain functions
+if (typeof window !== 'undefined') {
+  window.App = {
+    scrollToTop,
+    smoothScrollTo,
+    openWhatsAppGroup,
+    isValidEmail
+  };
+}
