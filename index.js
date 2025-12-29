@@ -251,7 +251,7 @@ function smoothScrollTo(selector) {
 }
 
 // ============================================
-// FORM HANDLING
+// FORM HANDLING - FORMPREE INTEGRATION
 // ============================================
 
 /**
@@ -321,11 +321,11 @@ function showFormSuccess(successId, form, submitBtn, originalBtnText) {
 }
 
 /**
- * Handle form submission
+ * Handle form submission with Formspree
  * @param {Event} e - Submit event
  * @param {Object} options - Form configuration options
  */
-function handleFormSubmit(e, options) {
+async function handleFormspreeSubmit(e, options) {
   e.preventDefault();
   
   const { form, successId, buttonId, validationFields } = options;
@@ -353,12 +353,67 @@ function handleFormSubmit(e, options) {
   
   // Disable submit button and show loading state
   submitBtn.disabled = true;
-  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
   
-  // Simulate API request (replace with actual API call)
-  setTimeout(() => {
-    showFormSuccess(successId, form, submitBtn, originalBtnText);
-  }, 1500);
+  try {
+    // Get form data
+    const formData = new FormData(form);
+    
+    // Get the Formspree endpoint from form action
+    const formspreeEndpoint = form.action;
+    
+    // Send to Formspree
+    const response = await fetch(formspreeEndpoint, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+    
+    if (response.ok) {
+      // Show success message
+      showFormSuccess(successId, form, submitBtn, originalBtnText);
+    } else {
+      // Try to parse error response
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `Form submission failed with status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Form submission error:', error);
+    
+    // Show error message
+    const errorMsg = document.createElement('div');
+    errorMsg.className = 'error-message';
+    errorMsg.style.display = 'block';
+    errorMsg.style.backgroundColor = 'var(--accent-color)';
+    errorMsg.style.color = 'white';
+    errorMsg.style.padding = '1rem';
+    errorMsg.style.borderRadius = '10px';
+    errorMsg.style.marginTop = '1rem';
+    errorMsg.style.textAlign = 'center';
+    errorMsg.innerHTML = `
+      <i class="fas fa-exclamation-circle"></i>
+      <p>Sorry, there was an error submitting the form. Please try again.</p>
+    `;
+    
+    // Insert error message after form
+    const formSubmit = form.querySelector('.form-submit');
+    if (formSubmit) {
+      formSubmit.appendChild(errorMsg);
+      
+      // Remove error message after 5 seconds
+      setTimeout(() => {
+        errorMsg.remove();
+      }, 5000);
+    } else {
+      alert('Sorry, there was an error submitting the form. Please try again.');
+    }
+    
+    // Reset button
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalBtnText;
+  }
 }
 
 // ============================================
@@ -503,37 +558,9 @@ function setupEventListeners() {
     });
   });
   
-  // Scripture form submission
-  if (scriptureForm) {
-    scriptureForm.addEventListener('submit', (e) => handleFormSubmit(e, {
-      form: scriptureForm,
-      successId: 'scripture-success',
-      buttonId: '#submit-scripture',
-      validationFields: [
-        { 
-          selector: '#reference', 
-          errorId: '#reference-error', 
-          required: true,
-          errorMessage: 'Please enter a scripture reference'
-        },
-        { 
-          selector: '#reflection', 
-          errorId: '#reflection-error', 
-          required: true,
-          errorMessage: 'Please share your reflection'
-        },
-        { 
-          selector: '#name', 
-          errorId: null, 
-          required: false 
-        }
-      ]
-    }));
-  }
-  
-  // Contact form submission
+  // Contact form submission with Formspree
   if (contactForm) {
-    contactForm.addEventListener('submit', (e) => handleFormSubmit(e, {
+    contactForm.addEventListener('submit', (e) => handleFormspreeSubmit(e, {
       form: contactForm,
       successId: 'contact-success',
       buttonId: '#submit-contact',
@@ -559,6 +586,76 @@ function setupEventListeners() {
         }
       ]
     }));
+    
+    // Add Formspree honeypot field if not present
+    const honeypot = contactForm.querySelector('[name="_gotcha"]');
+    if (!honeypot) {
+      const gotchaInput = document.createElement('input');
+      gotchaInput.type = 'text';
+      gotchaInput.name = '_gotcha';
+      gotchaInput.style.display = 'none';
+      contactForm.appendChild(gotchaInput);
+    }
+  }
+  
+  // Scripture form submission (keeping old method for now)
+  if (scriptureForm) {
+    scriptureForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const submitBtn = scriptureForm.querySelector('#submit-scripture');
+      const originalBtnText = submitBtn.innerHTML;
+      let isValid = true;
+      
+      // Validate fields
+      const referenceInput = scriptureForm.querySelector('#reference');
+      const referenceError = scriptureForm.querySelector('#reference-error');
+      const reflectionInput = scriptureForm.querySelector('#reflection');
+      const reflectionError = scriptureForm.querySelector('#reflection-error');
+      
+      if (!referenceInput.value.trim()) {
+        showFormError(referenceInput, referenceError, 'Please enter a scripture reference');
+        isValid = false;
+      } else {
+        hideFormError(referenceInput, referenceError);
+      }
+      
+      if (!reflectionInput.value.trim()) {
+        showFormError(reflectionInput, reflectionError, 'Please share your reflection');
+        isValid = false;
+      } else {
+        hideFormError(reflectionInput, reflectionError);
+      }
+      
+      if (!isValid) return;
+      
+      // Disable submit button and show loading state
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+      
+      // Simulate API request (replace with Formspree integration later)
+      setTimeout(() => {
+        const successMsg = document.getElementById('scripture-success');
+        
+        if (successMsg) {
+          successMsg.style.display = 'block';
+        }
+        
+        // Reset form
+        scriptureForm.reset();
+        
+        // Reset button
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+        
+        // Hide success message after 5 seconds
+        setTimeout(() => {
+          if (successMsg) {
+            successMsg.style.display = 'none';
+          }
+        }, 5000);
+      }, 1500);
+    });
   }
 }
 
@@ -634,6 +731,7 @@ if (typeof window !== 'undefined') {
     scrollToTop,
     smoothScrollTo,
     openWhatsAppGroup,
-    isValidEmail
+    isValidEmail,
+    handleFormspreeSubmit
   };
 }

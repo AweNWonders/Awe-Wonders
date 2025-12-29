@@ -324,71 +324,115 @@
     </svg>
   </div>
 
-  <!-- Contact Section -->
-  <section class="section contact" id="contact">
-    <div class="container">
-      <h2 class="section-title">Get in Touch</h2>
-      <div class="contact-wrapper">
-        <div class="contact-form" data-aos="fade-right">
-          <form id="contact-form">
-            <div class="form-group">
-              <label for="contact-name">Your Name*</label>
-              <input type="text" id="contact-name" name="contact-name" required placeholder="Enter your name">
-              <div class="error-message" id="name-error">Please enter your name</div>
-            </div>
-
-            <div class="form-group">
-              <label for="email">Email Address*</label>
-              <input type="email" id="email" name="email" required placeholder="Enter your email address">
-              <div class="error-message" id="email-error">Please enter a valid email address</div>
-            </div>
-
-            <div class="form-group">
-              <label for="message">Message*</label>
-              <textarea id="message" name="message" required placeholder="Your message or inquiry..."></textarea>
-              <div class="error-message" id="message-error">Please enter your message</div>
-            </div>
-
-            <div class="form-submit">
-              <button type="submit" class="btn btn-primary" id="submit-contact">
-                <i class="fas fa-paper-plane"></i> Send Message
-              </button>
-            </div>
-          </form>
-
-          <div class="success-message" id="contact-success">
-            <i class="fas fa-check-circle"></i>
-            <div>
-              <h4>Message Sent!</h4>
-              <p>We'll get back to you soon.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="contact-info" data-aos="fade-left">
-          <h3>Contact Information</h3>
-          <div class="contact-method">
-            <div class="contact-icon">
-              <i class="fas fa-envelope"></i>
-            </div>
-            <div>
-              <h4>Email</h4>
-              <a href="mailto:awenwonders@gmail.com">awenwonders@gmail.com</a>
-            </div>
-          </div>
-          <div class="contact-method">
-            <div class="contact-icon">
-              <i class="fab fa-whatsapp"></i>
-            </div>
-            <div>
-              <h4>WhatsApp Group</h4>
-              <a href="javascript:void(0)" id="whatsapp-link">Join Our Community</a>
-            </div>
+ <!-- Contact Section -->
+<section class="section contact" id="contact">
+  <div class="container">
+    <h2 class="section-title">Get in Touch</h2>
+    <div class="contact-wrapper">
+      <div class="contact-form" data-aos="fade-right">
+        <!-- Formspree Contact Form -->
+        <form id="contact-form" action="https://formspree.io/f/xgoepqzg" method="POST">
+          <!-- Hidden fields for Formspree -->
+          <input type="hidden" name="_subject" value="New Contact Message from The Awe & Wonders">
+          <input type="hidden" name="_language" value="en">
+          
+          <div class="form-group">
+            <label for="contact-name">Your Name*</label>
+            <input type="text" id="contact-name" name="name" required placeholder="Enter your name">
+            <div class="error-message" id="name-error">Please enter your name</div>
           </div>
 
+          <div class="form-group">
+            <label for="email">Email Address*</label>
+            <input type="email" id="email" name="email" required placeholder="Enter your email address">
+            <div class="error-message" id="email-error">Please enter a valid email address</div>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Message*</label>
+            <textarea id="message" name="message" required placeholder="Your message or inquiry..."></textarea>
+            <div class="error-message" id="message-error">Please enter your message</div>
+          </div>
+
+          <!-- Formspree Honeypot Field (Spam Protection) -->
+          <div style="display: none;">
+            <label for="honeypot">Leave this field empty</label>
+            <input type="text" id="honeypot" name="_gotcha">
+          </div>
+
+          <!-- Formspree Reply-To (Optional but helpful) -->
+          <input type="hidden" name="_replyto" id="reply-to-email">
+
+          <div class="form-submit">
+            <button type="submit" class="btn btn-primary" id="submit-contact">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+          </div>
+        </form>
+
+        <!-- Success Message -->
+        <div class="success-message" id="contact-success">
+          <i class="fas fa-check-circle"></i>
+          <div>
+            <h4>Message Sent Successfully!</h4>
+            <p>Thank you for reaching out. We'll get back to you soon.</p>
+            <p class="scripture" style="margin-top: 10px; font-size: 0.9em;">
+              "The LORD will answer you in the day of trouble!" — Psalm 20:1
+            </p>
+          </div>
         </div>
       </div>
-  </section>
+
+      <div class="contact-info" data-aos="fade-left">
+        <h3>Contact Information</h3>
+        
+        <div class="contact-method">
+          <div class="contact-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div>
+            <h4>Email</h4>
+            <a href="mailto:awenwonders@gmail.com">awenwonders@gmail.com</a>
+          </div>
+        </div>
+        
+        <div class="contact-method">
+          <div class="contact-icon">
+            <i class="fab fa-whatsapp"></i>
+          </div>
+          <div>
+            <h4>WhatsApp Group</h4>
+            <a href="javascript:void(0)" id="whatsapp-link">Join Our Community</a>
+          </div>
+        </div>
+
+        <div class="contact-method">
+          <div class="contact-icon">
+            <i class="fas fa-pray"></i>
+          </div>
+          <div>
+            <h4>Prayer Requests</h4>
+            <p>We're here to pray with you</p>
+          </div>
+        </div>
+
+        <div class="contact-method">
+          <div class="contact-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div>
+            <h4>Response Time</h4>
+            <p>We typically respond within 24-48 hours</p>
+          </div>
+        </div>
+
+        <div class="contact-note">
+          <p><i class="fas fa-info-circle"></i> All fields marked with * are required. We respect your privacy and will not share your information.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
   <!-- Footer -->
   <footer class="footer">
