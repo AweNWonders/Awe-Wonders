@@ -164,164 +164,9 @@ function openWhatsAppGroup() {
   window.open(WHATSAPP_GROUP_LINK, '_blank');
 }
 
-/**
- * Format WhatsApp message for scripture sharing
- */
-function formatWhatsAppMessage(name, reference, reflection) {
-  const currentDate = new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-  
-  const userName = name.trim() || 'Anonymous';
-  
-  return encodeURIComponent(`📖 NEW SCRIPTURE SHARING 📖
-
-🌟 *From:* ${userName}
-📚 *Scripture:* ${reference}
-📅 *Date:* ${currentDate}
-
-💭 *Reflection:*
-${reflection}
-
----
-*Shared via The Awe & Wonders Bible Study*
-*"Your word is a lamp to my feet and a light to my path." - Psalm 119:105*`);
-}
-
-/**
- * Open WhatsApp with formatted message
- */
-function shareToWhatsApp(name, reference, reflection) {
-  const message = formatWhatsAppMessage(name, reference, reflection);
-  const whatsappUrl = `${WHATSAPP_GROUP_LINK}?text=${message}`;
-  window.open(whatsappUrl, '_blank');
-}
-
-/**
- * Show confirmation modal before sharing to WhatsApp
- */
-function showConfirmationModal(name, reference, reflection, form, submitBtn, originalBtnText) {
-  // Create modal elements
-  const modal = document.createElement('div');
-  modal.className = 'confirmation-modal';
-  modal.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    backdrop-filter: blur(5px);
-  `;
-  
-  const modalContent = document.createElement('div');
-  modalContent.style.cssText = `
-    background: white;
-    padding: 2rem;
-    border-radius: 15px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  `;
-  
-  const userName = name.trim() || 'Anonymous';
-  
-  modalContent.innerHTML = `
-    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Confirm Sharing</h3>
-    <p style="margin-bottom: 1rem;">You're about to share this scripture to the WhatsApp group:</p>
-    
-    <div style="background: var(--light-color); padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
-      <p><strong>From:</strong> ${userName}</p>
-      <p><strong>Scripture:</strong> ${reference}</p>
-      <p><strong>Reflection:</strong> ${reflection.substring(0, 200)}${reflection.length > 200 ? '...' : ''}</p>
-    </div>
-    
-    <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1.5rem;">
-      <i class="fas fa-info-circle" style="color: var(--secondary-color);"></i>
-      The message will be formatted with our Bible Study header
-    </p>
-    
-    <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-      <button id="cancel-share" style="
-        padding: 0.8rem 1.5rem;
-        background: #f8f9fa;
-        border: 2px solid #e1e5e9;
-        border-radius: 8px;
-        color: var(--text-color);
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-      ">
-        Cancel
-      </button>
-      <button id="confirm-share" style="
-        padding: 0.8rem 1.5rem;
-        background: linear-gradient(135deg, var(--secondary-color), var(--teal));
-        border: none;
-        border-radius: 8px;
-        color: white;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-      ">
-        <i class="fab fa-whatsapp"></i> Share to WhatsApp
-      </button>
-    </div>
-  `;
-  
-  modal.appendChild(modalContent);
-  document.body.appendChild(modal);
-  
-  // Add event listeners
-  modal.querySelector('#cancel-share').addEventListener('click', () => {
-    document.body.removeChild(modal);
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = originalBtnText;
-  });
-  
-  modal.querySelector('#confirm-share').addEventListener('click', () => {
-    document.body.removeChild(modal);
-    shareToWhatsApp(name, reference, reflection);
-    
-    // Show success message
-    const successMsg = document.getElementById('scripture-success');
-    if (successMsg) {
-      successMsg.style.display = 'flex';
-    }
-    
-    // Reset form
-    form.reset();
-    
-    // Reset button
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = originalBtnText;
-    
-    // Hide success message after 5 seconds
-    setTimeout(() => {
-      if (successMsg) {
-        successMsg.style.display = 'none';
-      }
-    }, 5000);
-  });
-  
-  // Close modal when clicking outside
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      document.body.removeChild(modal);
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = originalBtnText;
-    }
-  });
-}
+// ============================================
+// SCRIPTURE FORM HANDLING
+// ============================================
 
 /**
  * Handle scripture form submission
@@ -368,6 +213,170 @@ function handleScriptureFormSubmit(e) {
   
   // Show confirmation modal
   showConfirmationModal(name, reference, reflection, form, submitBtn, originalBtnText);
+}
+
+/**
+ * Format WhatsApp message for scripture sharing
+ */
+function formatWhatsAppMessage(name, reference, reflection) {
+  const currentDate = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  
+  const userName = name || 'Anonymous';
+  
+  // Create a nicely formatted message for WhatsApp
+  return `📖 *NEW SCRIPTURE SHARING* 📖
+
+🌟 *From:* ${userName}
+📚 *Scripture:* ${reference}
+📅 *Date:* ${currentDate}
+
+💭 *Reflection:*
+${reflection}
+
+---
+*Shared via The Awe & Wonders Bible Study*
+*"Your word is a lamp to my feet and a light to my path." - Psalm 119:105*`;
+}
+
+/**
+ * Open WhatsApp with formatted message
+ */
+function shareToWhatsApp(name, reference, reflection) {
+  const message = formatWhatsAppMessage(name, reference, reflection);
+  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+  
+  // Open WhatsApp in a new tab
+  window.open(whatsappUrl, '_blank');
+}
+
+/**
+ * Show confirmation modal before sharing to WhatsApp
+ */
+function showConfirmationModal(name, reference, reflection, form, submitBtn, originalBtnText) {
+  // Create modal elements
+  const modal = document.createElement('div');
+  modal.className = 'confirmation-modal';
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+  `;
+  
+  const modalContent = document.createElement('div');
+  modalContent.style.cssText = `
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  `;
+  
+  const userName = name || 'Anonymous';
+  
+  modalContent.innerHTML = `
+    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Confirm Sharing</h3>
+    <p style="margin-bottom: 1rem;">You're about to share this scripture to WhatsApp:</p>
+    
+    <div style="background: var(--light-color); padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
+      <p><strong>From:</strong> ${userName}</p>
+      <p><strong>Scripture:</strong> ${reference}</p>
+      <p><strong>Reflection:</strong> ${reflection.substring(0, 200)}${reflection.length > 200 ? '...' : ''}</p>
+    </div>
+    
+    <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1.5rem;">
+      <i class="fas fa-info-circle" style="color: var(--secondary-color);"></i>
+      You'll be redirected to WhatsApp to choose a contact or group to share with
+    </p>
+    
+    <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+      <button id="cancel-share" style="
+        padding: 0.8rem 1.5rem;
+        background: #f8f9fa;
+        border: 2px solid #e1e5e9;
+        border-radius: 8px;
+        color: var(--text-color);
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+      ">
+        Cancel
+      </button>
+      <button id="confirm-share" style="
+        padding: 0.8rem 1.5rem;
+        background: linear-gradient(135deg, #25D366, #128C7E);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+      ">
+        <i class="fab fa-whatsapp"></i> Share to WhatsApp
+      </button>
+    </div>
+  `;
+  
+  modal.appendChild(modalContent);
+  document.body.appendChild(modal);
+  
+  // Add event listeners
+  modal.querySelector('#cancel-share').addEventListener('click', () => {
+    document.body.removeChild(modal);
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalBtnText;
+  });
+  
+  modal.querySelector('#confirm-share').addEventListener('click', () => {
+    document.body.removeChild(modal);
+    
+    // Actually share to WhatsApp
+    shareToWhatsApp(name, reference, reflection);
+    
+    // Show success message
+    const successMsg = document.getElementById('scripture-success');
+    if (successMsg) {
+      successMsg.style.display = 'flex';
+    }
+    
+    // Reset form
+    form.reset();
+    
+    // Reset button
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalBtnText;
+    
+    // Hide success message after 5 seconds
+    setTimeout(() => {
+      if (successMsg) {
+        successMsg.style.display = 'none';
+      }
+    }, 5000);
+  });
+  
+  // Close modal when clicking outside
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      document.body.removeChild(modal);
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnText;
+    }
+  });
 }
 
 // ============================================
