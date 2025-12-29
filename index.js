@@ -228,19 +228,19 @@ function formatWhatsAppMessage(name, reference, reflection) {
   
   const userName = name || 'Anonymous';
   
-  // Create a nicely formatted message for WhatsApp
-  return `📖 *NEW SCRIPTURE SHARING* 📖
+  // Create a nicely formatted message for WhatsApp (no emojis)
+  return `NEW SCRIPTURE SHARING
 
-🌟 *From:* ${userName}
-📚 *Scripture:* ${reference}
-📅 *Date:* ${currentDate}
+From: ${userName}
+Scripture: ${reference}
+Date: ${currentDate}
 
-💭 *Reflection:*
+Reflection:
 ${reflection}
 
 ---
-*Shared via The Awe & Wonders Bible Study*
-*"Your word is a lamp to my feet and a light to my path." - Psalm 119:105*`;
+From The Awe & Wonders Bible Study Group Website
+"Your word is a lamp to my feet and a light to my path." - Psalm 119:105`;
 }
 
 /**
@@ -248,7 +248,10 @@ ${reflection}
  */
 function shareToWhatsApp(name, reference, reflection) {
   const message = formatWhatsAppMessage(name, reference, reflection);
-  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+  
+  // Direct WhatsApp group link with pre-filled message
+  // Note: WhatsApp group links require the user to be in the group already
+  const whatsappUrl = `${WHATSAPP_GROUP_LINK}?text=${encodeURIComponent(message)}`;
   
   // Open WhatsApp in a new tab
   window.open(whatsappUrl, '_blank');
@@ -290,8 +293,8 @@ function showConfirmationModal(name, reference, reflection, form, submitBtn, ori
   const userName = name || 'Anonymous';
   
   modalContent.innerHTML = `
-    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Confirm Sharing</h3>
-    <p style="margin-bottom: 1rem;">You're about to share this scripture to WhatsApp:</p>
+    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Share to WhatsApp Group</h3>
+    <p style="margin-bottom: 1rem;">Your scripture will be shared directly to The Awe & Wonders WhatsApp group:</p>
     
     <div style="background: var(--light-color); padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
       <p><strong>From:</strong> ${userName}</p>
@@ -301,7 +304,7 @@ function showConfirmationModal(name, reference, reflection, form, submitBtn, ori
     
     <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1.5rem;">
       <i class="fas fa-info-circle" style="color: var(--secondary-color);"></i>
-      You'll be redirected to WhatsApp to choose a contact or group to share with
+      Note: You must already be a member of the WhatsApp group for this to work.
     </p>
     
     <div style="display: flex; gap: 1rem; justify-content: flex-end;">
@@ -327,7 +330,7 @@ function showConfirmationModal(name, reference, reflection, form, submitBtn, ori
         cursor: pointer;
         transition: var(--transition);
       ">
-        <i class="fab fa-whatsapp"></i> Share to WhatsApp
+        <i class="fab fa-whatsapp"></i> Share to Group
       </button>
     </div>
   `;
