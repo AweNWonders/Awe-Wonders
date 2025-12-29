@@ -44,6 +44,9 @@ const contactForm = document.getElementById('contact-form');
 // WhatsApp Links
 const whatsappLink = document.getElementById('whatsapp-link');
 
+// WhatsApp Group Link
+const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/GzBUWXC7hFKBsuh81Z2H5c";
+
 // ============================================
 // LOADER FUNCTIONALITY
 // ============================================
@@ -154,13 +157,217 @@ function handleResize() {
 // WHATSAPP FUNCTIONALITY
 // ============================================
 
-const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/GzBUWXC7hFKBsuh81Z2H5c";
-
 /**
  * Open WhatsApp group link
  */
 function openWhatsAppGroup() {
   window.open(WHATSAPP_GROUP_LINK, '_blank');
+}
+
+/**
+ * Format WhatsApp message for scripture sharing
+ */
+function formatWhatsAppMessage(name, reference, reflection) {
+  const currentDate = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  
+  const userName = name.trim() || 'Anonymous';
+  
+  return encodeURIComponent(`📖 NEW SCRIPTURE SHARING 📖
+
+🌟 *From:* ${userName}
+📚 *Scripture:* ${reference}
+📅 *Date:* ${currentDate}
+
+💭 *Reflection:*
+${reflection}
+
+---
+*Shared via The Awe & Wonders Bible Study*
+*"Your word is a lamp to my feet and a light to my path." - Psalm 119:105*`);
+}
+
+/**
+ * Open WhatsApp with formatted message
+ */
+function shareToWhatsApp(name, reference, reflection) {
+  const message = formatWhatsAppMessage(name, reference, reflection);
+  const whatsappUrl = `${WHATSAPP_GROUP_LINK}?text=${message}`;
+  window.open(whatsappUrl, '_blank');
+}
+
+/**
+ * Show confirmation modal before sharing to WhatsApp
+ */
+function showConfirmationModal(name, reference, reflection, form, submitBtn, originalBtnText) {
+  // Create modal elements
+  const modal = document.createElement('div');
+  modal.className = 'confirmation-modal';
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+  `;
+  
+  const modalContent = document.createElement('div');
+  modalContent.style.cssText = `
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  `;
+  
+  const userName = name.trim() || 'Anonymous';
+  
+  modalContent.innerHTML = `
+    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Confirm Sharing</h3>
+    <p style="margin-bottom: 1rem;">You're about to share this scripture to the WhatsApp group:</p>
+    
+    <div style="background: var(--light-color); padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
+      <p><strong>From:</strong> ${userName}</p>
+      <p><strong>Scripture:</strong> ${reference}</p>
+      <p><strong>Reflection:</strong> ${reflection.substring(0, 200)}${reflection.length > 200 ? '...' : ''}</p>
+    </div>
+    
+    <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1.5rem;">
+      <i class="fas fa-info-circle" style="color: var(--secondary-color);"></i>
+      The message will be formatted with our Bible Study header
+    </p>
+    
+    <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+      <button id="cancel-share" style="
+        padding: 0.8rem 1.5rem;
+        background: #f8f9fa;
+        border: 2px solid #e1e5e9;
+        border-radius: 8px;
+        color: var(--text-color);
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+      ">
+        Cancel
+      </button>
+      <button id="confirm-share" style="
+        padding: 0.8rem 1.5rem;
+        background: linear-gradient(135deg, var(--secondary-color), var(--teal));
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+      ">
+        <i class="fab fa-whatsapp"></i> Share to WhatsApp
+      </button>
+    </div>
+  `;
+  
+  modal.appendChild(modalContent);
+  document.body.appendChild(modal);
+  
+  // Add event listeners
+  modal.querySelector('#cancel-share').addEventListener('click', () => {
+    document.body.removeChild(modal);
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalBtnText;
+  });
+  
+  modal.querySelector('#confirm-share').addEventListener('click', () => {
+    document.body.removeChild(modal);
+    shareToWhatsApp(name, reference, reflection);
+    
+    // Show success message
+    const successMsg = document.getElementById('scripture-success');
+    if (successMsg) {
+      successMsg.style.display = 'flex';
+    }
+    
+    // Reset form
+    form.reset();
+    
+    // Reset button
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalBtnText;
+    
+    // Hide success message after 5 seconds
+    setTimeout(() => {
+      if (successMsg) {
+        successMsg.style.display = 'none';
+      }
+    }, 5000);
+  });
+  
+  // Close modal when clicking outside
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      document.body.removeChild(modal);
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnText;
+    }
+  });
+}
+
+/**
+ * Handle scripture form submission
+ */
+function handleScriptureFormSubmit(e) {
+  e.preventDefault();
+  
+  const form = e.target;
+  const submitBtn = form.querySelector('#submit-scripture');
+  const originalBtnText = submitBtn.innerHTML;
+  let isValid = true;
+  
+  // Validate fields
+  const referenceInput = form.querySelector('#reference');
+  const referenceError = form.querySelector('#reference-error');
+  const reflectionInput = form.querySelector('#reflection');
+  const reflectionError = form.querySelector('#reflection-error');
+  const nameInput = form.querySelector('#name');
+  
+  if (!referenceInput.value.trim()) {
+    showFormError(referenceInput, referenceError, 'Please enter a scripture reference');
+    isValid = false;
+  } else {
+    hideFormError(referenceInput, referenceError);
+  }
+  
+  if (!reflectionInput.value.trim()) {
+    showFormError(reflectionInput, reflectionError, 'Please share your reflection');
+    isValid = false;
+  } else {
+    hideFormError(reflectionInput, reflectionError);
+  }
+  
+  if (!isValid) return;
+  
+  // Disable submit button and show loading state
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing...';
+  
+  // Get form data
+  const name = nameInput.value.trim();
+  const reference = referenceInput.value.trim();
+  const reflection = reflectionInput.value.trim();
+  
+  // Show confirmation modal
+  showConfirmationModal(name, reference, reflection, form, submitBtn, originalBtnText);
 }
 
 // ============================================
@@ -297,7 +504,7 @@ function showFormSuccess(successId, form, submitBtn, originalBtnText) {
   const successMsg = document.getElementById(successId);
   
   if (successMsg) {
-    successMsg.style.display = 'block';
+    successMsg.style.display = 'flex';
   }
   
   // Reset form
@@ -558,7 +765,7 @@ function setupEventListeners() {
     });
   });
   
-  // Contact form submission with Formspree
+  // Contact form submission with Formspree (UNCHANGED - Your Formspree still works!)
   if (contactForm) {
     contactForm.addEventListener('submit', (e) => handleFormspreeSubmit(e, {
       form: contactForm,
@@ -598,64 +805,9 @@ function setupEventListeners() {
     }
   }
   
-  // Scripture form submission (keeping old method for now)
+  // Scripture form submission (NEW - Now sends to WhatsApp)
   if (scriptureForm) {
-    scriptureForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      
-      const submitBtn = scriptureForm.querySelector('#submit-scripture');
-      const originalBtnText = submitBtn.innerHTML;
-      let isValid = true;
-      
-      // Validate fields
-      const referenceInput = scriptureForm.querySelector('#reference');
-      const referenceError = scriptureForm.querySelector('#reference-error');
-      const reflectionInput = scriptureForm.querySelector('#reflection');
-      const reflectionError = scriptureForm.querySelector('#reflection-error');
-      
-      if (!referenceInput.value.trim()) {
-        showFormError(referenceInput, referenceError, 'Please enter a scripture reference');
-        isValid = false;
-      } else {
-        hideFormError(referenceInput, referenceError);
-      }
-      
-      if (!reflectionInput.value.trim()) {
-        showFormError(reflectionInput, reflectionError, 'Please share your reflection');
-        isValid = false;
-      } else {
-        hideFormError(reflectionInput, reflectionError);
-      }
-      
-      if (!isValid) return;
-      
-      // Disable submit button and show loading state
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-      
-      // Simulate API request (replace with Formspree integration later)
-      setTimeout(() => {
-        const successMsg = document.getElementById('scripture-success');
-        
-        if (successMsg) {
-          successMsg.style.display = 'block';
-        }
-        
-        // Reset form
-        scriptureForm.reset();
-        
-        // Reset button
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnText;
-        
-        // Hide success message after 5 seconds
-        setTimeout(() => {
-          if (successMsg) {
-            successMsg.style.display = 'none';
-          }
-        }, 5000);
-      }, 1500);
-    });
+    scriptureForm.addEventListener('submit', handleScriptureFormSubmit);
   }
 }
 
@@ -722,7 +874,7 @@ window.addEventListener('load', () => {
 });
 
 // ============================================
-// GLOBAL EXPORTS (if needed for debugging)
+// GLOBAL EXPORTS
 // ============================================
 
 // For debugging purposes, you can expose certain functions
@@ -732,6 +884,8 @@ if (typeof window !== 'undefined') {
     smoothScrollTo,
     openWhatsAppGroup,
     isValidEmail,
-    handleFormspreeSubmit
+    handleFormspreeSubmit,
+    shareToWhatsApp,
+    formatWhatsAppMessage
   };
 }

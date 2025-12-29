@@ -1,3 +1,4 @@
+
 :root {
   --primary-color: #2C3E50;
   --secondary-color: #3498DB;
@@ -119,12 +120,14 @@ h2 {
 
 .section {
   padding: 6rem 0;
+  position: relative;
 }
 
 .section-title {
   text-align: center;
   margin-bottom: 3rem;
   position: relative;
+  z-index: 2;
 }
 
 .section-title:after {
@@ -136,6 +139,7 @@ h2 {
   width: 80px;
   height: 3px;
   background: linear-gradient(to right, var(--secondary-color), var(--teal));
+  z-index: 2;
 }
 
 .section-subtitle {
@@ -144,6 +148,8 @@ h2 {
   margin: 0 auto 3rem;
   color: var(--text-light);
   font-size: 1.1rem;
+  position: relative;
+  z-index: 2;
 }
 
 /* Navigation */
@@ -173,6 +179,11 @@ h2 {
   width: 100%;
 }
 
+/* FIX FOR LOGO TEXT DECORATION - Add this rule */
+.navbar .logo {
+  text-decoration: none !important;
+}
+
 .logo-container {
   display: flex;
   align-items: center;
@@ -195,7 +206,6 @@ h2 {
   font-weight: 700;
   color: var(--primary-color);
   white-space: nowrap;
-  text-decoration: none;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 200px;
@@ -378,6 +388,8 @@ h2 {
   margin-bottom: 1rem;
   color: var(--gold);
   font-weight: 600;
+  position: relative;
+  z-index: 2;
 }
 
 .tagline {
@@ -385,6 +397,8 @@ h2 {
   margin-bottom: 2rem;
   opacity: 0.9;
   line-height: 1.5;
+  position: relative;
+  z-index: 2;
 }
 
 .hero-buttons {
@@ -394,6 +408,8 @@ h2 {
   margin-top: 2rem;
   flex-wrap: wrap;
   width: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 .hero-buttons .btn {
@@ -427,6 +443,24 @@ h2 {
 /* About Section */
 .about {
   background-color: var(--light-color);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Abstract background pattern for About section */
+.about::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("imgs/before2.jpg");
+  background-color: rgba(0, 0, 0, 0.253);
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.4;
+  z-index: 1;
 }
 
 .about-content {
@@ -434,6 +468,8 @@ h2 {
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
   align-items: center;
+  position: relative;
+  z-index: 2;
 }
 
 .about-text p {
@@ -449,6 +485,7 @@ h2 {
   color: white;
   position: relative;
   box-shadow: var(--shadow);
+  z-index: 2;
 }
 
 .quote-icon {
@@ -475,6 +512,8 @@ h2 {
   width: 100%;
   overflow: hidden;
   line-height: 0;
+  position: relative;
+  z-index: 2;
 }
 
 .section-divider svg {
@@ -507,6 +546,22 @@ h2 {
 /* What We Do Section */
 .services {
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Abstract background pattern for Services */
+.services::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0V0zm20 20h60v60H20V20zm10 10h40v40H30V30z' fill='%233498db' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background-size: 400px;
+  opacity: 0.3;
+  z-index: 1;
 }
 
 .services-grid {
@@ -514,6 +569,8 @@ h2 {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
   margin-top: 3rem;
+  position: relative;
+  z-index: 2;
 }
 
 .service-card {
@@ -526,6 +583,27 @@ h2 {
   border: 1px solid rgba(0, 0, 0, 0.05);
   width: 100%;
   max-width: 100%;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+}
+
+/* Abstract pattern on service cards */
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(52, 152, 219, 0.05) 0%, rgba(52, 152, 219, 0) 70%);
+  z-index: -1;
+  transition: var(--transition);
+  opacity: 0;
+}
+
+.service-card:hover::before {
+  opacity: 1;
 }
 
 .service-card:hover {
@@ -538,16 +616,22 @@ h2 {
   color: var(--secondary-color);
   margin-bottom: 1.5rem;
   display: inline-block;
+  position: relative;
+  z-index: 2;
 }
 
 .service-card h3 {
   margin-bottom: 1rem;
   color: var(--primary-color);
+  position: relative;
+  z-index: 2;
 }
 
 .service-card p {
   color: var(--text-light);
   line-height: 1.6;
+  position: relative;
+  z-index: 2;
 }
 
 /* Word of the Week Section */
@@ -556,6 +640,20 @@ h2 {
   color: white;
   position: relative;
   overflow: hidden;
+}
+
+/* Abstract pattern for Word of Week */
+.word-of-week::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("imgs/before2.jpg");
+  background-size: cover;
+  opacity: 0.3;
+  z-index: 1;
 }
 
 .word-of-week .section-title {
@@ -576,6 +674,8 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   width: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 .word-header {
@@ -608,6 +708,22 @@ h2 {
 /* Share Scripture Section */
 .share-scripture {
   background-color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Abstract background for Share Scripture */
+.share-scripture::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0V0zm10 10h80v80H10V10zm5 5h70v70H15V15zm-5 40h80v5H10v-5zm0-15h80v5H10v-5zm0-15h80v5H10v-5zm0 45h80v5H10v-5zm0 15h80v5H10v-5z' fill='%231abc9c' fill-opacity='0.03'/%3E%3C/svg%3E");
+  background-size: 350px;
+  opacity: 0.4;
+  z-index: 1;
 }
 
 .scripture-form {
@@ -618,6 +734,8 @@ h2 {
   border-radius: 20px;
   box-shadow: var(--shadow);
   width: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 .form-row {
@@ -685,6 +803,8 @@ h2 {
   margin-top: 2rem;
   text-align: center;
   width: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 .success-message i {
@@ -700,6 +820,22 @@ h2 {
 /* Gatherings Section */
 .gatherings {
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Abstract background for Gatherings */
+.gatherings::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("imgs/before2.jpg");
+  background-size: cover;
+  opacity: 0.4;
+  z-index: 1;
 }
 
 .gathering-card {
@@ -710,6 +846,8 @@ h2 {
   overflow: hidden;
   box-shadow: var(--shadow);
   width: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 .gathering-header {
@@ -774,12 +912,34 @@ h2 {
 }
 
 /* Contact Section */
+.contact {
+  background-color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Abstract background for Contact */
+.contact::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0V0zm10 10h80v80H10V10zm10 10h60v60H20V20zm10 10h40v40H30V30zm10 10h20v20H40V40z' fill='%23e74c3c' fill-opacity='0.03'/%3E%3C/svg%3E");
+  background-size: 400px;
+  opacity: 0.4;
+  z-index: 1;
+}
+
 .contact-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
   align-items: start;
   width: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 .contact-form {
@@ -856,12 +1016,30 @@ h2 {
   color: white;
   padding: 3rem 0 2rem;
   width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Abstract pattern for Footer */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0V0zm20 20h60v60H20V20zm10 10h40v40H30V30zm10 10h20v20H40V40z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E");
+  background-size: 250px;
+  opacity: 0.3;
+  z-index: 1;
 }
 
 .footer-content {
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 .footer-main {
