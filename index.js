@@ -47,6 +47,9 @@ const whatsappLink = document.getElementById('whatsapp-link');
 // WhatsApp Group Link
 const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/GzBUWXC7hFKBsuh81Z2H5c";
 
+// Formspree Endpoints
+const FORMPREE_SCRIPTURE_ENDPOINT = "https://formspree.io/f/xgoepqzg"; // Same as contact form
+
 // ============================================
 // LOADER FUNCTIONALITY
 // ============================================
@@ -165,13 +168,13 @@ function openWhatsAppGroup() {
 }
 
 // ============================================
-// SCRIPTURE FORM HANDLING
+// SCRIPTURE FORM HANDLING (NOW USING FORMPREE)
 // ============================================
 
 /**
- * Handle scripture form submission
+ * Handle scripture form submission with Formspree
  */
-function handleScriptureFormSubmit(e) {
+async function handleScriptureFormSubmit(e) {
   e.preventDefault();
   
   const form = e.target;
@@ -204,182 +207,99 @@ function handleScriptureFormSubmit(e) {
   
   // Disable submit button and show loading state
   submitBtn.disabled = true;
-  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing...';
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
   
-  // Get form data
-  const name = nameInput.value.trim();
-  const reference = referenceInput.value.trim();
-  const reflection = reflectionInput.value.trim();
-  
-  // Show confirmation modal
-  showConfirmationModal(name, reference, reflection, form, submitBtn, originalBtnText);
-}
-
-/**
- * Format WhatsApp message for scripture sharing
- */
-function formatWhatsAppMessage(name, reference, reflection) {
-  const currentDate = new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-  
-  const userName = name || 'Anonymous';
-  
-  // Create a nicely formatted message for WhatsApp (no emojis)
-  return `NEW SCRIPTURE SHARING
-
-From: ${userName}
-Scripture: ${reference}
-Date: ${currentDate}
-
-Reflection:
-${reflection}
-
----
-From The Awe & Wonders Bible Study Group Website
-"Your word is a lamp to my feet and a light to my path." - Psalm 119:105`;
-}
-
-/**
- * Open WhatsApp with formatted message
- */
-function shareToWhatsApp(name, reference, reflection) {
-  const message = formatWhatsAppMessage(name, reference, reflection);
-  
-  // Direct WhatsApp group link with pre-filled message
-  // Note: WhatsApp group links require the user to be in the group already
-  const whatsappUrl = `${WHATSAPP_GROUP_LINK}?text=${encodeURIComponent(message)}`;
-  
-  // Open WhatsApp in a new tab
-  window.open(whatsappUrl, '_blank');
-}
-
-/**
- * Show confirmation modal before sharing to WhatsApp
- */
-function showConfirmationModal(name, reference, reflection, form, submitBtn, originalBtnText) {
-  // Create modal elements
-  const modal = document.createElement('div');
-  modal.className = 'confirmation-modal';
-  modal.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    backdrop-filter: blur(5px);
-  `;
-  
-  const modalContent = document.createElement('div');
-  modalContent.style.cssText = `
-    background: white;
-    padding: 2rem;
-    border-radius: 15px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  `;
-  
-  const userName = name || 'Anonymous';
-  
-  modalContent.innerHTML = `
-    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Share to WhatsApp Group</h3>
-    <p style="margin-bottom: 1rem;">Your scripture will be shared directly to The Awe & Wonders WhatsApp group:</p>
+  try {
+    // Get form data
+    const name = nameInput.value.trim();
+    const reference = referenceInput.value.trim();
+    const reflection = reflectionInput.value.trim();
     
-    <div style="background: var(--light-color); padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
-      <p><strong>From:</strong> ${userName}</p>
-      <p><strong>Scripture:</strong> ${reference}</p>
-      <p><strong>Reflection:</strong> ${reflection.substring(0, 200)}${reflection.length > 200 ? '...' : ''}</p>
-    </div>
+    // Prepare form data for Formspree
+    const formData = new FormData();
+    formData.append('_subject', 'New Scripture Sharing from The Awe & Wonders Website');
+    formData.append('_language', 'en');
     
-    <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1.5rem;">
-      <i class="fas fa-info-circle" style="color: var(--secondary-color);"></i>
-      Note: You must already be a member of the WhatsApp group for this to work.
-    </p>
+    // Add the actual form data
+    formData.append('name', name || 'Anonymous');
+    formData.append('scripture_reference', reference);
+    formData.append('reflection', reflection);
     
-    <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-      <button id="cancel-share" style="
-        padding: 0.8rem 1.5rem;
-        background: #f8f9fa;
-        border: 2px solid #e1e5e9;
-        border-radius: 8px;
-        color: var(--text-color);
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-      ">
-        Cancel
-      </button>
-      <button id="confirm-share" style="
-        padding: 0.8rem 1.5rem;
-        background: linear-gradient(135deg, #25D366, #128C7E);
-        border: none;
-        border-radius: 8px;
-        color: white;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-      ">
-        <i class="fab fa-whatsapp"></i> Share to Group
-      </button>
-    </div>
-  `;
-  
-  modal.appendChild(modalContent);
-  document.body.appendChild(modal);
-  
-  // Add event listeners
-  modal.querySelector('#cancel-share').addEventListener('click', () => {
-    document.body.removeChild(modal);
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = originalBtnText;
-  });
-  
-  modal.querySelector('#confirm-share').addEventListener('click', () => {
-    document.body.removeChild(modal);
+    // Add honeypot field for spam protection
+    formData.append('_gotcha', '');
     
-    // Actually share to WhatsApp
-    shareToWhatsApp(name, reference, reflection);
+    // Send to Formspree
+    const response = await fetch(FORMPREE_SCRIPTURE_ENDPOINT, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
     
-    // Show success message
-    const successMsg = document.getElementById('scripture-success');
-    if (successMsg) {
-      successMsg.style.display = 'flex';
+    if (response.ok) {
+      // Show success message
+      const successMsg = document.getElementById('scripture-success');
+      if (successMsg) {
+        successMsg.style.display = 'flex';
+      }
+      
+      // Reset form
+      form.reset();
+      
+      // Reset button
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnText;
+      
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        if (successMsg) {
+          successMsg.style.display = 'none';
+        }
+      }, 5000);
+      
+      // Scroll to show success message
+      if (successMsg) {
+        successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    } else {
+      throw new Error(`Form submission failed with status: ${response.status}`);
     }
+  } catch (error) {
+    console.error('Scripture form submission error:', error);
     
-    // Reset form
-    form.reset();
+    // Show error message
+    const errorMsg = document.createElement('div');
+    errorMsg.className = 'error-message';
+    errorMsg.style.display = 'block';
+    errorMsg.style.backgroundColor = 'var(--accent-color)';
+    errorMsg.style.color = 'white';
+    errorMsg.style.padding = '1rem';
+    errorMsg.style.borderRadius = '10px';
+    errorMsg.style.marginTop = '1rem';
+    errorMsg.style.textAlign = 'center';
+    errorMsg.innerHTML = `
+      <i class="fas fa-exclamation-circle"></i>
+      <p>Sorry, there was an error submitting your scripture. Please try again.</p>
+    `;
+    
+    // Insert error message after form
+    const formSubmit = form.querySelector('.form-submit');
+    if (formSubmit) {
+      formSubmit.appendChild(errorMsg);
+      
+      // Remove error message after 5 seconds
+      setTimeout(() => {
+        errorMsg.remove();
+      }, 5000);
+    } else {
+      alert('Sorry, there was an error submitting your scripture. Please try again.');
+    }
     
     // Reset button
     submitBtn.disabled = false;
     submitBtn.innerHTML = originalBtnText;
-    
-    // Hide success message after 5 seconds
-    setTimeout(() => {
-      if (successMsg) {
-        successMsg.style.display = 'none';
-      }
-    }, 5000);
-  });
-  
-  // Close modal when clicking outside
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      document.body.removeChild(modal);
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = originalBtnText;
-    }
-  });
+  }
 }
 
 // ============================================
@@ -777,7 +697,7 @@ function setupEventListeners() {
     });
   });
   
-  // Contact form submission with Formspree (UNCHANGED - Your Formspree still works!)
+  // Contact form submission with Formspree
   if (contactForm) {
     contactForm.addEventListener('submit', (e) => handleFormspreeSubmit(e, {
       form: contactForm,
@@ -817,7 +737,7 @@ function setupEventListeners() {
     }
   }
   
-  // Scripture form submission (NEW - Now sends to WhatsApp)
+  // Scripture form submission (UPDATED - Now uses Formspree)
   if (scriptureForm) {
     scriptureForm.addEventListener('submit', handleScriptureFormSubmit);
   }
@@ -897,7 +817,6 @@ if (typeof window !== 'undefined') {
     openWhatsAppGroup,
     isValidEmail,
     handleFormspreeSubmit,
-    shareToWhatsApp,
-    formatWhatsAppMessage
+    handleScriptureFormSubmit
   };
 }
